@@ -48,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -61,9 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,1,MapsActivity.this);
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        assert location != null;
-        onLocationChanged(location);
+
     }
 
     @Override
@@ -71,9 +69,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mylat = location.getLatitude();
         mylong = location.getLongitude();
 
+        Toast.makeText(MapsActivity.this, "onlocationchanged called", Toast.LENGTH_LONG).show();
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("location");
         databaseReference.setValue(mylat+"\n"+mylong);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d("Location","status");
     }
 
     @Override
@@ -159,7 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker2 = null;
                 }
                 if (marker2 == null){
-                    marker2 = mMap.addMarker(new MarkerOptions().position(locate2).title("your vehicle!!!"));
+                    marker2 = mMap.addMarker(new MarkerOptions().position(locate2).title("your location!!!"+latitude+"  "+longitude));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(locate2));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(19.0f));
                 }
