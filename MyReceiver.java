@@ -1,10 +1,11 @@
-package com.example.atsproject;
+package com.example.receivesms;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,7 +13,10 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.security.PrivateKey;
+
 public class MyReceiver extends BroadcastReceiver {
+
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = "SmsBroadcastReceiver";
     String msg,phone ="";
@@ -48,6 +52,7 @@ public class MyReceiver extends BroadcastReceiver {
 
                     databaseReference.setValue(msg);
 
+                    Toast.makeText(context, "message: " +msg+ "\nnumber:" +phone, Toast.LENGTH_LONG).show();
                 }
             }
         }
