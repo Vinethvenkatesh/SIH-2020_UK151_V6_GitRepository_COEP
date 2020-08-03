@@ -2,8 +2,12 @@ package com.example.atsproject;
 
     import androidx.annotation.NonNull;
     import androidx.appcompat.app.AppCompatActivity;
+    import androidx.core.app.ActivityCompat;
+    import androidx.core.content.ContextCompat;
 
+    import android.Manifest;
     import android.content.Intent;
+    import android.content.pm.PackageManager;
     import android.os.Bundle;
     import android.view.Menu;
     import android.view.MenuItem;
@@ -11,6 +15,8 @@ package com.example.atsproject;
     import android.widget.Button;
     import android.widget.CompoundButton;
     import android.widget.Switch;
+    import android.widget.Toast;
+
     import com.google.firebase.auth.FirebaseAuth;
     import com.google.firebase.auth.FirebaseUser;
     import com.google.firebase.database.DatabaseReference;
@@ -25,6 +31,7 @@ package com.example.atsproject;
         FirebaseAuth myfirebaseauth;
         FirebaseAuth.AuthStateListener mauthstatelistener;
         DatabaseReference myref;
+        private static final int My_per_req = 0;
 
 
         @Override
@@ -79,15 +86,43 @@ package com.example.atsproject;
             bt4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myref = myfirebasedb.getReference("command");
-                    myref.setValue("6");
-                    Intent intogeo = new Intent(home.this, mapact.class);
-                    startActivity(intogeo);
+
+                    if (ContextCompat.checkSelfPermission(home.this, Manifest.permission.RECEIVE_SMS)
+                            + ContextCompat.checkSelfPermission(home.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(home.this, Manifest.permission.RECEIVE_SMS) &&
+                                ActivityCompat.shouldShowRequestPermissionRationale(home.this, Manifest.permission.ACCESS_FINE_LOCATION)){
+                            Toast.makeText(home.this,"permissions are denied..pls give permission", Toast.LENGTH_LONG).show();
+                            ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.RECEIVE_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, My_per_req);
+                        }
+                        else{
+                            ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.RECEIVE_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, My_per_req);
+                        }
+                    }
+                    else{
+                        Intent intomp = new Intent(home.this, mapact.class);
+                        startActivity(intomp);
+                    }
                 }
             });
 
 
         }
+        @Override
+        public  void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+            switch(requestCode){
+                case My_per_req:{
+                    if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                        Toast.makeText(home.this, "thank you for permitting!!!", Toast.LENGTH_LONG).show();
+                        Intent intomap = new Intent(home.this, mapact.class);
+                        startActivity(intomap);
+                    }
+                    else{
+                        Toast.makeText(home.this, "pls give permission", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -104,9 +139,9 @@ package com.example.atsproject;
                    finish();
                    FirebaseUser currentuser = myfirebaseauth.getCurrentUser();
                    if(currentuser == null){
-                       Intent intolog = new Intent(home.this, MainActivity.class);
-                       intolog.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                       startActivity(intolog);
+                       Intent intomain = new Intent(home.this, MainActivity.class);
+                       intomain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       startActivity(intomain);
                    }
                 }
 

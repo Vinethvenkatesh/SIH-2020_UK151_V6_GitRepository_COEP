@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">atsproject</string>
+
+    <string name="textView">Login to keep your vehicle safe!!</string>
+    <string name="editText1">Email</string>
+    <string name="editText2">Password</string>
+    <string name="button">Sign in</string>
+    <string name="textView3">Don\'t have an account?Sign up!</string>
+    <string name="textView4">Forgot Password?</string>
+
+    <string name="textview2">ATS</string>
+    <string name="switch1">PARKING MODE</string>
+    <string name="texton">ON</string>
+    <string name="button4">Track My Vehicle</string>
+    <string name="switch2">CASING</string>
+    <string name="textoff">OFF</string>
+    <string name="button3">RECOVER SYSTEM</string>
+
+    <string name="textView5">Create Account</string>
+    <string name="editText3">Name</string>
+    <string name="editText4">Phone no</string>
+    <string name="editText5">Email</string>
+    <string name="editText6">Password</string>
+    <string name="textView7">Already have an account!! Sign in</string>
+    <string name="button2">Sign up</string>
+
+    <string name="editText">Latitude</string>
+    <string name="editText7">Longitude</string>
+    <string name="button5">Track</string>
+    <string name="title_activity_mapact">Map</string>
+
+
+    <string name="editText8">Email</string>
+    <string name="button6">Reset password</string>
+    <string name="textView6">Enter your registered Email ID</string>
+
+
+</resources>

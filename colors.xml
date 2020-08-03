@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5C2818</color>
+    <color name="colorPrimaryDark">#B8836F</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="colorgradientstart">#e6ccb3</color>
+    <color name="colorgradientcentre">#F8E2E7</color>
+    <color name="colorgradientend">#e6ccb3</color>
+
+    <color name = "colorblue">#2E48C9</color>
+</resources>
