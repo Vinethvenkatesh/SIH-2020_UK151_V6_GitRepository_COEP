@@ -5,6 +5,7 @@ float lat = 12.9647, lon = 80.1961;
 
 const int fuel_level_pin = A0;
 int fuel_level;
+int fuel_check;
 
 String latitude;
 String longitude;
@@ -17,7 +18,6 @@ void message1(void);
 void message2(void);
 void message3(void);
 
-String readstring;
 
 #define AlarmPin 4
 
@@ -37,6 +37,9 @@ void setup()
 
 void loop()
 {  
+  interval = 0;
+  period = 0;
+  
   latitude = String(lat,6);
   longitude = String(lon,6);
 
@@ -52,6 +55,7 @@ void loop()
   Serial.print(interval);  
   Serial.println(" cm");
  
+ 
   if(interval >= 20 || interval==0)//ground clearance should be considered
   {
     message1();
@@ -63,12 +67,25 @@ void loop()
   //Fuel Level SENSOR
   fuel_level = analogRead(fuel_level_pin);
 
+  Serial.print("Fuel Level: ");
+  Serial.println(fuel_level);
+
   fuel_level = map(fuel_level, 0, 1023, 0 , 100);
+
  
   Serial.print("Fuel Level Percentage: ");
   Serial.println(fuel_level);
- 
-  if(fuel_level <= fuel_level-2 || fuel_level>= fuel_level+2)
+ delay(1000);
+
+
+   fuel_check = analogRead(fuel_level_pin);
+
+   fuel_check = map(fuel_check, 0, 1023, 0 , 100);
+
+  Serial.print("Fuel Level Percentage: ");
+  Serial.println(fuel_check);
+  
+ if(fuel_level <= fuel_check-2 || fuel_level>= fuel_check+2)
   {
     message2();
     digitalWrite(AlarmPin,HIGH);
@@ -77,19 +94,7 @@ void loop()
   }
 
   //GPS
-  while (Serial.available())
-  {
-    delay(10);
-    char c = Serial.read();
-    readstring += c;
-  }  
- 
-  if (readstring.length() > 0)
-  {
-    Serial.println(readstring);
-   
-    if(1)// add the server call inside if case
-    {
+  
       latitude = String(lat,6);
       longitude = String(lon,6);
 
@@ -100,11 +105,7 @@ void loop()
         Serial.println();
         delay(500);  
       }  
-    }
-   
-    readstring="";   //Reset the variable
-  }
-  //
+
  
   while(Serial2.available())
   { 
@@ -140,7 +141,7 @@ void message1(void)
   Serial1.print("7092483899");delay(500);
   Serial1.write('"');
   Serial1.print("\r\n");delay(500);
-  Serial1.print("'Theft drtected. Secure vehicle'");delay(500);//17
+  Serial1.print("'Movement detected. Secure vehicle'");delay(500);//17
   delay(500);
   Serial1.write(26);
 }
@@ -154,7 +155,7 @@ void message2(void)
   Serial1.print("7092483899");delay(500);
   Serial1.write('"');
   Serial1.print("\r\n");delay(500);
-  Serial1.print("'Theft drtected. Secure vehicle'\r\n lat:");delay(500);//17
+  Serial1.print("'Fuel Theft detected. Secure vehicle'\r\n lat:");delay(500);//17
   delay(500);
   Serial1.write(26);
 }
